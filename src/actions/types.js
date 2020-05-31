@@ -1,0 +1,3 @@
+export const APP = {
+  SWITCH_UI_VERSION: 'SWITCH_UI_VERSION',
+}
