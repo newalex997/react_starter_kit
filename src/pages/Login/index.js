@@ -21,7 +21,7 @@ const LoginPage = () => {
   }
 
   if (isAuthentificated) {
-    return <Redirect to="/deshboard" />
+    return <Redirect to="/" />
   }
 
   return (

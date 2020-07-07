@@ -8,7 +8,6 @@ import { getAppFetchingStatus, getAppUIVersion } from './selectors'
 
 import Home from './pages/Home'
 import LogInPage from './pages/Login'
-import Deshboard from './pages/Deshboard'
 import NotFoundPage from './pages/NotFound'
 
 const App = () => {
@@ -43,7 +42,6 @@ const App = () => {
   return (
     <Switch>
       <Route path="/" exact component={Home} />
-      <Route path="/deshboard" exact component={Deshboard} />
       <Route path="/login" component={LogInPage} />
       <Route component={NotFoundPage} />
     </Switch>

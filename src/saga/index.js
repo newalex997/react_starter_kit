@@ -1,14 +1,10 @@
-import { all, takeEvery } from 'redux-saga/effects'
+import { all, call } from 'redux-saga/effects'
 
-import { AUTH_STATE, LOGIN, LOGOUT } from '../actions/auth/types'
-import auth, { login, logout } from './sagas/auth'
+import authSaga from './sagas/auth'
+import librarySaga from './sagas/library'
 
 function* rootSaga() {
-  yield all([
-    takeEvery(AUTH_STATE.REQUEST, auth),
-    takeEvery(LOGIN.REQUEST, login),
-    takeEvery(LOGOUT.REQUEST, logout),
-  ])
+  yield all([call(authSaga), call(librarySaga)])
 }
 
 export default rootSaga

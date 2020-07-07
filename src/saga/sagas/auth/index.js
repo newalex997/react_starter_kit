@@ -1,6 +1,10 @@
-import { call, put } from 'redux-saga/effects'
+import { all, call, put, takeEvery } from 'redux-saga/effects'
+import { AUTH_STATE, LOGIN, LOGOUT } from '../../../actions/auth/types'
 import authorizedApiRequest from '../../../common/fetch/authorized'
+
 import fetchPersonalData from './profile'
+import loginSaga from './login'
+import logoutSaga from './logout'
 
 import {
   loginSucces,
@@ -10,14 +14,19 @@ import {
   fetchInitialStateSucces,
 } from '../../../actions/auth'
 
+import { fetchBooksList, fetchShelvesList } from '../library'
+
 export function* authSucces(status) {
   if (status === 'RESOLVED') {
     const accessToken = localStorage.getItem('ACCESS_TOKEN')
     const userData = yield call(fetchPersonalData, accessToken)
 
+    // here we can do something with auth user data
     yield put(setProfileData(userData))
 
-    // here we can do something with auth user data
+    // load books and shelves
+    yield call(fetchBooksList, accessToken)
+    yield call(fetchShelvesList, accessToken)
   }
 
   yield put(fetchInitialStateSucces())
@@ -72,8 +81,10 @@ function* fetchAuthState() {
   yield call(authSucces, 'REJECTED')
 }
 
-export { default as login } from './login'
-export { default as logout } from './logout'
-export { default as profile } from './profile'
-
-export default fetchAuthState
+export default function* authSagaWatcher() {
+  yield all([
+    takeEvery(AUTH_STATE.REQUEST, fetchAuthState),
+    takeEvery(LOGIN.REQUEST, loginSaga),
+    takeEvery(LOGOUT.REQUEST, logoutSaga),
+  ])
+}
